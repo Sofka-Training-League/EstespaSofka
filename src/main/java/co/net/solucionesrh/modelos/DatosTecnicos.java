@@ -5,10 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tbl_datos_tecnicos", catalog="estespa", schema="")
+@Table(name="tbl_datos_tecnicos", schema="")
 public class DatosTecnicos {
 	
 	@Id
@@ -16,8 +18,13 @@ public class DatosTecnicos {
 	@Column
 	private Long codigo;
 	
+	/*
 	@Column(length = 11, nullable = false)
 	private Long codnave;
+	*/
+	@ManyToOne
+	@JoinColumn(name="codnave")
+	private Naves naves;
 	
 	@Column(length = 80, nullable = false)
 	private String datotecnico;
@@ -29,9 +36,9 @@ public class DatosTecnicos {
 		super();
 	}
 
-	public DatosTecnicos(Long codnave, String datotecnico, String valor) {
+	public DatosTecnicos(Naves naves, String datotecnico, String valor) {
 		super();
-		this.codnave = codnave;
+		this.naves = naves;
 		this.datotecnico = datotecnico;
 		this.valor = valor;
 	}
@@ -39,23 +46,20 @@ public class DatosTecnicos {
 	public Long getCodigo() {
 		return codigo;
 	}
-
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
 
-	public Long getCodnave() {
-		return codnave;
+	public Naves getNaves() {
+		return naves;
 	}
-
-	public void setCodnave(Long codnave) {
-		this.codnave = codnave;
+	public void setNaves(Naves naves) {
+		this.naves = naves;
 	}
 
 	public String getDatotecnico() {
 		return datotecnico;
 	}
-
 	public void setDatotecnico(String datotecnico) {
 		this.datotecnico = datotecnico;
 	}
@@ -63,14 +67,14 @@ public class DatosTecnicos {
 	public String getValor() {
 		return valor;
 	}
-
 	public void setValor(String valor) {
 		this.valor = valor;
 	}
 
 	@Override
 	public String toString() {
-		return "DatosTecnicos [codigo=" + codigo + ", codnave=" + codnave + ", datotecnico=" + datotecnico + ", valor="
+		return "DatosTecnicos [codigo=" + codigo + ", naves=" + naves + ", datotecnico=" + datotecnico + ", valor="
 				+ valor + "]";
 	}
+
 }

@@ -5,10 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tbl_naves", catalog="estespa", schema="")
+@Table(name="tbl_naves", schema="")
 public class Naves {
 	
 	@Id
@@ -16,9 +18,22 @@ public class Naves {
 	@Column(length = 11)
 	private Long codnave;
 	
+	/*
 	@Column(length = 5, nullable = false )
 	private Integer tiponave;
-	
+	*/
+	@ManyToOne
+	@JoinColumn(name="tiponave")
+	private Tipos tipos;
+		
+	public Tipos getTipos() {
+		return tipos;
+	}
+
+	public void setTipos(Tipos tipos) {
+		this.tipos = tipos;
+	}
+
 	@Column(length = 80, nullable = false, unique = true )
 	private String nombre;
 	
@@ -41,13 +56,14 @@ public class Naves {
 		super();
 	}
 
-	public Naves(Integer tiponave, String nombre, String paisorigen, String objetivo) {
+
+	public Naves(Tipos tipos, String nombre, String paisorigen, String objetivo, Integer estado) {
 		super();
-		this.tiponave = tiponave;
+		this.tipos = tipos;
 		this.nombre = nombre;
 		this.paisorigen = paisorigen;
 		this.objetivo = objetivo;
-		this.estado=1;
+		this.estado = estado;
 	}
 
 	public Long getCodnave() {
@@ -56,14 +72,6 @@ public class Naves {
 
 	public void setCodnave(Long codnave) {
 		this.codnave = codnave;
-	}
-
-	public Integer getTiponave() {
-		return tiponave;
-	}
-
-	public void setTiponave(Integer tiponave) {
-		this.tiponave = tiponave;
 	}
 
 	public String getNombre() {
@@ -116,9 +124,9 @@ public class Naves {
 
 	@Override
 	public String toString() {
-		return "Naves [codnave=" + codnave + ", tiponave=" + tiponave + ", nombre=" + nombre + ", paisorigen="
-				+ paisorigen + ", inexploracion=" + inexploracion + ", endexploracion=" + endexploracion + ", objetivo="
-				+ objetivo + ", estado=" + estado + "]";
+		return "Naves [codnave=" + codnave + ", tipos=" + tipos + ", nombre=" + nombre + ", paisorigen=" + paisorigen
+				+ ", inexploracion=" + inexploracion + ", endexploracion=" + endexploracion + ", objetivo=" + objetivo
+				+ ", estado=" + estado + "]";
 	}
-	
+
 }
