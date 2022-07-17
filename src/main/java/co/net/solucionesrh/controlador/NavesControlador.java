@@ -47,7 +47,7 @@ public class NavesControlador {
 	@PostMapping
 	public Naves insertar(@RequestBody Naves nave) {
 		nave.setCodnave(null);
-		nave.setEstado(1);
+		//nave.setEstados(1);
 		return interfaceNaves.save(nave);
 	}
 
