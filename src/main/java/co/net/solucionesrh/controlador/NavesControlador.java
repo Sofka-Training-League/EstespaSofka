@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import co.net.solucionesrh.repositorio.InterfaceNaves;
 
 @RestController
 @RequestMapping("/naves")
+@CrossOrigin("*")
 public class NavesControlador {
 
 	// Instancia por debajo la interface
@@ -44,11 +46,6 @@ public class NavesControlador {
 	// Insertar nuevo registro
 	@PostMapping
 	public Naves insertar(@RequestBody Naves nave) {
-		/*
-		 * if (nave.getCodnave() != null) { System.out.println("Se paso el codigo");
-		 * nave.setCodnave(null); } else {
-		 * System.out.println("No se paso el codigo"); }
-		 */
 		nave.setCodnave(null);
 		nave.setEstado(1);
 		return interfaceNaves.save(nave);

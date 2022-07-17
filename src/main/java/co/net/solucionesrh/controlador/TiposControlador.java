@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,7 @@ import co.net.solucionesrh.repositorio.InterfaceTipos;
 
 @RestController
 @RequestMapping("/tipos")
+@CrossOrigin("*")
 public class TiposControlador {
 
 	// Instancia por debajo la interface
@@ -39,6 +43,20 @@ public class TiposControlador {
 			System.out.println("Intentando consultar elemento no existente");
 			return null;
 		}
+	}
+	
+	// Buscar tipo de nave por estado
+	@GetMapping(value = "/ByEstado/{estado}")
+	@Query("SELECT * FROM tbl_tipos_nave t WHERE t.estado = %:strEstado%")
+	public List<Tipos> buscarXestado(@Param("strEstado") String strEstado) {
+		return null;
+		/*
+		try {
+			return List<Tipos>
+		} catch (Exception e) {
+			System.out.println("Intentando consultar elemento no existente");
+			return null;
+		}*/
 	}
 
 	// Insertar nuevo tipo de nave

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,19 +19,17 @@ import co.net.solucionesrh.repositorio.InterfaceDatosTecnicos;
 
 @RestController
 @RequestMapping("/datostecnicos")
+@CrossOrigin("*")
 public class DatosTecnicosControlador {
 
-	// Instancia por debajo la interface
 	@Autowired
 	private InterfaceDatosTecnicos interfaceDatosTecnicos;
 
-	// Listar todos los registros
 	@GetMapping
 	public List<DatosTecnicos> datoTecnicos() {
 		return (List<DatosTecnicos>) interfaceDatosTecnicos.findAll();
 	}
 
-	// Buscar registro por Id
 	@GetMapping(value = "/{id}")
 	public Optional<DatosTecnicos> buscarXId(@PathVariable("id") String strId) {
 		try {
@@ -41,19 +40,12 @@ public class DatosTecnicosControlador {
 		}
 	}
 
-	// Insertar nuevo registro
 	@PostMapping
 	public DatosTecnicos insertar(@RequestBody DatosTecnicos datoTecnico) {
-		/*
-		 * if (datoTecnico.getCoddatoTecniconave() != null) { System.out.println("Se paso el codigo");
-		 * datoTecnico.setCoddatoTecniconave(null); } else {
-		 * System.out.println("No se paso el codigo"); }
-		 */
 		datoTecnico.setCodigo(null);
 		return interfaceDatosTecnicos.save(datoTecnico);
 	}
 
-	// Actualizar registro
 	@PutMapping
 	public boolean modificar(@RequestBody DatosTecnicos datoTecnico) {
 		try {
@@ -73,7 +65,6 @@ public class DatosTecnicosControlador {
 		}
 	}
 
-	// Eliminar un registro
 	@DeleteMapping(value = "/{id}")
 	public boolean eliminar(@PathVariable("id") String strId) {
 		try {
@@ -85,7 +76,6 @@ public class DatosTecnicosControlador {
 		}
 	}
 	
-	// Eliminar logicamente un registro
 	@PutMapping(value = "/{id}")
 	public boolean eliminarLogicamente(@PathVariable("id") String strId) {
 		return true;
