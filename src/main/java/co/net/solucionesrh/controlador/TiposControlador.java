@@ -45,18 +45,12 @@ public class TiposControlador {
 		}
 	}
 	
-	// Buscar tipo de nave por estado
-	@GetMapping(value = "/ByEstado/{estado}")
-	@Query("SELECT * FROM tbl_tipos_nave t WHERE t.estado = %:strEstado%")
-	public List<Tipos> buscarXestado(@Param("strEstado") String strEstado) {
-		return null;
-		/*
-		try {
-			return List<Tipos>
-		} catch (Exception e) {
-			System.out.println("Intentando consultar elemento no existente");
-			return null;
-		}*/
+	// Busqueda sencilla por nombre
+	@GetMapping(value = "/ByNombre/{nombre}")
+	// @Query("SELECT * FROM tbl_tipos_nave WHERE nombre LIKE %:nombre%")
+	// public List<Tipos> buscarXnombre(@Param("nombre") String nombre);
+	public List<Tipos> buscarXnombre(@Param("nombre") String nombre){
+		return interfaceTipoNave.findByNombre(nombre);
 	}
 
 	// Insertar nuevo tipo de nave
