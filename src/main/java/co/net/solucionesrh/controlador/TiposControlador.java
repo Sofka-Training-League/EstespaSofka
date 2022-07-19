@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,13 +27,14 @@ public class TiposControlador {
 	@Autowired
 	private InterfaceTipos interfaceTipoNave;
 
-	// Listar todos los tipos de naves
+	// ----------------- Listar todos los tipos de naves -----------------
 	@GetMapping
 	public List<Tipos> tipos() {
 		return (List<Tipos>) interfaceTipoNave.findAll();
 	}
 
-	// Buscar tipo de nave por Id
+	// ----------------- Busquedas -----------------
+	// Buscar por Id
 	@GetMapping(value = "/{id}")
 	public Optional<Tipos> buscarXId(@PathVariable("id") String strId) {
 		try {
@@ -44,29 +44,34 @@ public class TiposControlador {
 			return null;
 		}
 	}
-	
-	// Busqueda sencilla por nombre
+
+	//Buscar coincidencias en los nombres con like
+	@GetMapping(value = "/ByLike/{nombre}")
+	public List<Tipos> likeNombre(@PathVariable("nombre") String nombre){
+		return interfaceTipoNave.findByLikeName(nombre);
+	}
+
+	//Buscar por nombre
 	@GetMapping(value = "/ByNombre/{nombre}")
-	// @Query("SELECT * FROM tbl_tipos_nave WHERE nombre LIKE %:nombre%")
-	// public List<Tipos> buscarXnombre(@Param("nombre") String nombre);
-	public List<Tipos> buscarXnombre(@Param("nombre") String nombre){
+	public Optional<Tipos> buscarByNombre(@PathVariable("nombre") String nombre){
 		return interfaceTipoNave.findByNombre(nombre);
 	}
 
-	// Insertar nuevo tipo de nave
+	//Buscar coincidencias en los nombres con like
+	@GetMapping(value = "/filtro/{filtro}")
+	public List<Tipos> filterAdvanced(@PathVariable("filtro") String filtro){
+		return interfaceTipoNave.filterAdvanced(filtro);
+	}
+
+	// ----------------- Insertar nuevo tipo de nave -----------------
 	@PostMapping
 	public Tipos insertar(@RequestBody Tipos tipo) {
-		/*
-		 * if (tipo.getCodtiponave() != null) { System.out.println("Se paso el codigo");
-		 * tipo.setCodtiponave(null); } else {
-		 * System.out.println("No se paso el codigo"); }
-		 */
 		tipo.setCodtiponave(null);
 		tipo.setEstado(1);
 		return interfaceTipoNave.save(tipo);
 	}
 
-	// Actualizar tipo de nave
+	// ----------------- Actualizar tipo de nave -----------------
 	@PutMapping
 	public boolean modificar(@RequestBody Tipos tipo) {
 		try {
@@ -86,7 +91,8 @@ public class TiposControlador {
 		}
 	}
 
-	// Eliminar tipo de nave
+	// ----------------- Eliminar tipo de nave -----------------
+	//Delete
 	@DeleteMapping(value = "/{id}")
 	public boolean eliminar(@PathVariable("id") String strId) {
 		try {
@@ -97,10 +103,23 @@ public class TiposControlador {
 			return false;
 		}
 	}
-	
-	// Eliminar logicamente un tipo de nave
-	@PutMapping(value = "/{id}")
-	public boolean eliminarLogicamente(@PathVariable("id") String strId) {
-		return true;
+
+	//Setear estado, Eliminar logicamente el tipo de nave
+	@PatchMapping(value = "/inactivar/{id}")
+	public Optional<Tipos> eliminarLogicamente(@PathVariable("id") Integer id) {
+		Optional<Tipos> myTipo = interfaceTipoNave.findById(id);
+    	myTipo.get().setEstado(0);
+    	interfaceTipoNave.save(myTipo.get());
+		return myTipo;
 	}
+
+	//Setear estado, Eliminar logicamente el tipo de nave
+	@PatchMapping(value = "/reactivar/{id}")
+	public Optional<Tipos> restaurarLogicamente(@PathVariable("id") Integer id) {
+		Optional<Tipos> myTipo = interfaceTipoNave.findById(id);
+		myTipo.get().setEstado(1);
+		interfaceTipoNave.save(myTipo.get());
+		return myTipo;
+	}
+	
 }
