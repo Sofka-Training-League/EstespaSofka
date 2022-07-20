@@ -36,7 +36,7 @@ public class TiposControlador {
 	// ----------------- Busquedas -----------------
 	// Buscar por Id
 	@GetMapping(value = "/{id}")
-	public Optional<Tipos> buscarXId(@PathVariable("id") String strId) {
+	public Optional<Tipos> buscarById(@PathVariable("id") String strId) {
 		try {
 			return interfaceTipoNave.findById(Integer.parseInt(strId));
 		} catch (Exception e) {
